@@ -41,11 +41,10 @@ export default function VistaProceso() {
           <Link
             key={cat.id}
             to={`/proceso/${procesoId}/categoria/${cat.id}`}
-            className="bg-white p-5 rounded-xl border border-slate-200 hover:border-[#e20074] hover:shadow-md transition duration-200 flex flex-col justify-between group"
+            className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-[#e20074] hover:shadow-md transition duration-200 flex flex-col justify-between group min-h-[120px]"
           >
             <div>
-              <span className="text-xs text-slate-400 font-mono">Categoría #{cat.id}</span>
-              <h3 className="text-lg font-bold text-slate-800 group-hover:text-[#e20074] transition duration-150 mt-1">
+              <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#e20074] transition duration-150">
                 {cat.nombre}
               </h3>
             </div>

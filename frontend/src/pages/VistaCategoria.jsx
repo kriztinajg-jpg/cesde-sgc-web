@@ -6,18 +6,20 @@ export default function VistaCategoria() {
   const { procesoId, categoriaId } = useParams();
   const navigate = useNavigate();
   const [busqueda, setBusqueda] = useState('');
+  
+  // Estado para controlar qué documento se está visualizando en el Modal
+  const [documentoseleccionado, setDocumentoSeleccionado] = useState(null);
 
   // Buscar información de la categoría y del proceso actual
   const categoria = categoriasDocumentales?.find(c => c.id === parseInt(categoriaId)) || { nombre: 'Categoría' };
   
-  // Buscar el nombre del área/proceso si existe en los mockData
   let nombreProceso = 'Proceso';
   procesosSGC?.forEach(p => {
     const areaEncontrada = p.areas?.find(a => a.id === parseInt(procesoId));
     if (areaEncontrada) nombreProceso = areaEncontrada.nombre;
   });
 
-  // Filtrar los documentos correspondientes a esta categoría (y opcionalmente proceso)
+  // Filtrar los documentos
   const documentosFiltrados = documentosData.filter(doc => {
     const coincideCategoria = doc.categoriaId === parseInt(categoriaId);
     const coincideBusqueda = doc.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -26,7 +28,7 @@ export default function VistaCategoria() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4 relative">
       
       {/* Botón de regreso */}
       <div className="mb-6">
@@ -50,7 +52,6 @@ export default function VistaCategoria() {
             </h1>
           </div>
 
-          {/* Campo de búsqueda */}
           <div className="w-full md:w-72">
             <input
               type="text"
@@ -89,14 +90,12 @@ export default function VistaCategoria() {
                     </td>
                     <td className="p-4 text-slate-500">{doc.fecha}</td>
                     <td className="p-4 text-center">
-                      <a
-                        href={doc.url}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        onClick={() => setDocumentoSeleccionado(doc)}
                         className="inline-block text-xs font-semibold bg-[#e20074] text-white px-3.5 py-2 rounded-lg hover:bg-pink-700 transition duration-200 shadow-sm"
                       >
                         Ver Documento
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -110,6 +109,75 @@ export default function VistaCategoria() {
           </div>
         )}
       </div>
+
+      {/* MODAL DE VISUALIZACIÓN DE DOCUMENTO */}
+      {documentoseleccionado && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 relative">
+            
+            {/* Header del Modal */}
+            <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-xs bg-slate-100 text-slate-600 font-mono font-bold px-2.5 py-1 rounded-md">
+                  {documentoseleccionado.codigo}
+                </span>
+                <h2 className="text-xl font-bold text-slate-800 mt-2">
+                  {documentoseleccionado.nombre}
+                </h2>
+              </div>
+              <button
+                onClick={() => setDocumentoSeleccionado(null)}
+                className="text-slate-400 hover:text-slate-600 text-xl font-bold px-2 py-1 rounded-lg hover:bg-slate-100 transition"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Contenido / Simulación del Documento */}
+            <div className="py-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl text-xs text-slate-600 border border-slate-100">
+                <div>
+                  <p className="font-semibold text-slate-400 uppercase">Versión Vigente</p>
+                  <p className="text-sm font-bold text-slate-700">{documentoseleccionado.version}</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-400 uppercase">Fecha Aprobación</p>
+                  <p className="text-sm font-bold text-slate-700">{documentoseleccionado.fecha}</p>
+                </div>
+              </div>
+
+              {/* Contenedor que simula la vista previa del archivo */}
+              <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center bg-slate-50/50">
+                <div className="text-4xl mb-2">📄</div>
+                <p className="text-sm font-semibold text-slate-700">Vista previa del archivo PDF/Word</p>
+                <p className="text-xs text-slate-400 mt-1">
+                  Documento oficial registrado en el SGC CESDE.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer / Botones de acción */}
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+              <button
+                onClick={() => setDocumentoSeleccionado(null)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition"
+              >
+                Cerrar
+              </button>
+              <a
+                href={documentoseleccionado.url}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => alert("Simulación: Descargando archivo del SGC...")}
+                className="px-4 py-2 text-xs font-semibold bg-[#e20074] text-white rounded-lg hover:bg-pink-700 transition shadow-sm flex items-center gap-1"
+              >
+                📥 Descargar Archivo
+              </a>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );
