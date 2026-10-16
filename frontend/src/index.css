@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cesde: #E6007E;
+}
