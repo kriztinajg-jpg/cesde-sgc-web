@@ -90,3 +90,36 @@ export const categoriasDocumentales = [
   { id: 6, nombre: "Indicadores" },
   { id: 7, nombre: "Planes de mejora" }
 ];
+
+export const documentosData = [
+  {
+    id: 1,
+    codigo: "SGC-FMT-001",
+    nombre: "Formato de Caracterización de Procesos",
+    version: "1.0",
+    fecha: "2026-02-15",
+    categoriaId: 3, // Formatos
+    procesoId: 4,   // Auditoría y Calidad (o el id del proceso correspondiente)
+    url: "#"
+  },
+  {
+    id: 2,
+    codigo: "SGC-PRO-002",
+    nombre: "Procedimiento de Auditoría Interna",
+    version: "2.1",
+    fecha: "2026-03-01",
+    categoriaId: 2, // Procedimientos
+    procesoId: 4,
+    url: "#"
+  },
+  {
+    id: 3,
+    codigo: "SGC-MAN-001",
+    nombre: "Manual de Calidad Institucional",
+    version: "3.0",
+    fecha: "2026-01-20",
+    categoriaId: 4, // Documentos
+    procesoId: 1,
+    url: "#"
+  }
+];
